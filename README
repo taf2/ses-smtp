@@ -1,0 +1,9 @@
+SMTP Interface to Amazon SES
+
+
+Amazon's SES is very nice and affordable.  It would be even nicer if it could be used through existing SMTP clients
+
+
+ses-smtp acts as a simple proxy translating SMTP to amazon ses HTTP
+
+
