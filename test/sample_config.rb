@@ -4,9 +4,11 @@ require 'logger'
 host 'localhost'
 port 40998
 
+server "email.us-east-1.amazonaws.com"
 access_key "amazon-access-key"
 secret_key "amazon-secret-key"
 domain "example.com"
+
 logger Logger.new(File.expand_path(File.join(File.dirname(__FILE__),'..','log','test.log')))
 
 # attach hooks to perform custom actions before and after emails are sent

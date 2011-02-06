@@ -3,20 +3,24 @@
 require 'ostruct'
 require 'eventmachine'
 require 'ses_smtp/config'
+require 'ses_smtp/mailer'
 
 module SesSmtp
   class Server < EM::P::SmtpServer
+    def self.config
+      @config
+    end
 
     def receive_plain_auth(user, pass)
       true
     end
 
     def get_server_domain
-      "mock.smtp.server.local"
+      Server.config.options.domain || "mock.smtp.server.local"
     end
 
     def get_server_greeting
-      "mock smtp server greets you with impunity"
+      "smtp ses greetings"
     end
 
     def receive_sender(sender)
@@ -33,13 +37,18 @@ module SesSmtp
       current.received = true
       current.completed_at = Time.now
 
-      p [:received_email, current]
+      begin
+        SesSmtp::Mailer.new(Server.config).send_email_raw(current)
+      rescue => e
+        p e
+        p [:received_email, current]
+      end
+
       @current = OpenStruct.new
       true
     end
 
     def receive_ehlo_domain(domain)
-#      puts "domain:#{domain.inspect}"
       @ehlo_domain = domain
       true
     end
@@ -50,7 +59,6 @@ module SesSmtp
     end
 
     def receive_data_chunk(data)
-#      puts "data:#{data.inspect}"
       current.data << data.join("\n")
       true
     end

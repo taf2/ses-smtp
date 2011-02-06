@@ -13,7 +13,7 @@ module SesSmtp
     
     def initialize(path)
       @path = path
-      @options = OpenStruct.new {}
+      @options = OpenStruct.new({:server => 'email.us-east-1.amazonaws.com', :api => '2010-12-01' })
       run
     end
 
@@ -23,6 +23,10 @@ module SesSmtp
 
     def port(p)
       @options.port = p
+    end
+
+    def server(server)
+      @options.server = server
     end
 
     def logger(l)

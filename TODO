@@ -1,0 +1,2 @@
+only need to parse as much of the message to know it's a complete one
+this should allow us to use the raw interface only
