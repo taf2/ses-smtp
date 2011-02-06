@@ -3,4 +3,6 @@
 $:.unshift File.expand_path(File.join(File.dirname(__FILE__),'../lib'))
 require 'ses_smtp'
 
+puts "TODO: cli"
+exit 1
 EM.run{ SesSmtp::Server.start }

@@ -7,4 +7,25 @@ Amazon's SES is very nice and affordable.  It would be even nicer if it could be
 ses-smtp acts as a simple proxy translating SMTP to amazon ses HTTP
 
 
-The neat thing is the configuration of the server - it's ruby
+== Config Usage
+
+host 'localhost'
+port 40998
+
+server "email.us-east-1.amazonaws.com"
+access_key "amazon-access-key"
+secret_key "amazon-secret-key"
+domain "example.com"
+
+# attach hooks to perform custom actions before and after emails are sent
+before_send do|email|
+  puts "sending email to #{email.recipient.inspect}"
+end
+
+after_send do|email, status|
+  puts "email sent with status: #{status}"
+end
+
+== TODO
+  - should be able to pass much more of the email direct to amazon using the send raw API
+  - commandline interface
