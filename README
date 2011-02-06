@@ -7,3 +7,4 @@ Amazon's SES is very nice and affordable.  It would be even nicer if it could be
 ses-smtp acts as a simple proxy translating SMTP to amazon ses HTTP
 
 
+The neat thing is the configuration of the server - it's ruby

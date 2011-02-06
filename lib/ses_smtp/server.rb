@@ -1,5 +1,8 @@
+# -*- encoding: binary -*-
 # source originally from: http://rdoc.info/github/eventmachine/eventmachine/master/EventMachine/Protocols/SmtpServer
 require 'ostruct'
+require 'eventmachine'
+require 'ses_smtp/config'
 
 module SesSmtp
   class Server < EM::P::SmtpServer
@@ -16,16 +19,19 @@ module SesSmtp
     end
 
     def receive_sender(sender)
+#      puts sender.inspect
       current.sender = sender
       true
     end
 
     def receive_recipient(recipient)
+#      puts recipient.inspect
       current.recipient = recipient
       true
     end
 
     def receive_message
+#      puts "message"
       current.received = true
       current.completed_at = Time.now
 
@@ -35,6 +41,7 @@ module SesSmtp
     end
 
     def receive_ehlo_domain(domain)
+#      puts "domain:#{domain.inspect}"
       @ehlo_domain = domain
       true
     end
@@ -45,6 +52,7 @@ module SesSmtp
     end
 
     def receive_data_chunk(data)
+#      puts "data:#{data.inspect}"
       current.data << data.join("\n")
       true
     end
@@ -61,8 +69,17 @@ module SesSmtp
       @current ||= OpenStruct.new
     end
 
-    def self.start(host = 'localhost', port = 1025)
-      @server = EM.start_server host, port, self
+    def self.start(config_path)
+      @config = Config.new(config_path)
+
+      trap(:HUP)  { reload }
+      trap(:QUIT) { stop }
+
+      @server = EM.start_server @config.host, @config.port, self
+    end
+
+    def self.reload
+      @config.reload
     end
 
     def self.stop
