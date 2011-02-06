@@ -79,7 +79,7 @@ module SesSmtp
     end
 
     def self.reload
-      @config.reload
+      @config = Config.new(@config.path)
     end
 
     def self.stop
