@@ -11,6 +11,10 @@ TPORT=40998
 
 module TestEmailSender
 
+  def config_path
+    TestPath + '/sample_config.rb'
+  end
+
   def send_plain_to_from(to, from, subject, message)
     f = Fiber.current
 

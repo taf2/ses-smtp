@@ -26,8 +26,6 @@ module SesSmtp
     end
 
     def logger(l)
-      puts "assign a logger"
-      puts l.inspect
       @options.logger = l
     end
 

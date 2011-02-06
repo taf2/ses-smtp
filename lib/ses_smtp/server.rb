@@ -6,6 +6,7 @@ require 'ses_smtp/config'
 
 module SesSmtp
   class Server < EM::P::SmtpServer
+
     def receive_plain_auth(user, pass)
       true
     end
@@ -19,19 +20,16 @@ module SesSmtp
     end
 
     def receive_sender(sender)
-#      puts sender.inspect
       current.sender = sender
       true
     end
 
     def receive_recipient(recipient)
-#      puts recipient.inspect
       current.recipient = recipient
       true
     end
 
     def receive_message
-#      puts "message"
       current.received = true
       current.completed_at = Time.now
 
@@ -75,7 +73,7 @@ module SesSmtp
       trap(:HUP)  { reload }
       trap(:QUIT) { stop }
 
-      @server = EM.start_server @config.host, @config.port, self
+      @server = EM.start_server @config.options.host, @config.options.port, self
     end
 
     def self.reload
